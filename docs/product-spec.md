@@ -1,6 +1,8 @@
-# Contextual Intent Engine (CIE)
+# GoCue
 
 ## Product & Engineering Specification
+
+GoCue is the product name. Contextual Intent Engine (CIE) is the name of its underlying context evaluation architecture in this specification.
 
 **Goal:** Store intentions, not reminder times. Surface an intention
 when the user's real-world context makes it actionable.
