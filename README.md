@@ -25,4 +25,4 @@
 - Отчёт ЛР 1 и его генератор: docs/lab-01/, build_lab1_report.py.
 - Черновик задач для GitHub Issues: docs/lab-01/backlog.md.
 
-Репозиторий проекта: https://github.com/techmo0/GoCue. Доска GitHub Projects пока не создана; тема и отчёт требуют согласования с преподавателем.
+Репозиторий проекта: https://github.com/techmo0/GoCue. Доска GitHub Projects: https://github.com/users/techmo0/projects/1/views/1. Тема и отчёт требуют согласования с преподавателем.
