@@ -87,10 +87,10 @@ replace_paragraph(
     'В команде из четырёх человек роли распределены по таблице. Код пишут все участники; UX и техническую документацию ведут назначенные участники.',
 )
 replace_paragraph('ещё одно допущение или ограничение', 'Ограничение: GoCue не строит маршруты, не ищет магазины автоматически и не гарантирует точность работы геозон без испытаний на устройстве.')
-replace_paragraph('Ответственный за раздел: QA / DevOps-инженер', 'Ответственная за раздел: Поспелова М. Т. (тестирование); правила согласуются всей командой.')
+replace_paragraph('Ответственный за раздел: QA / DevOps-инженер', 'Ведение журнала предложено Поспеловой М. Т.; правила использования ИИ утверждает вся команда.')
 replace_paragraph('Ответственный за раздел: Tech Lead и QA / DevOps-инженер', 'Ответственные за раздел: Боровик Ф. И. (репозиторий), Поспелова М. Т. (проверка); доступы и настройки подтверждаются командой.')
 replace_paragraph('Проверьте факты об аналогах сами, даже если нашли их с помощью ИИ.', 'Сведения о возможностях аналогов сверены с официальными справками Apple и Google; отличия в поведении уведомлений ещё требуют практической проверки.')
-replace_paragraph('Правила курса обязательны для всех команд; добавьте собственные правила команды.', 'Команда использует ИИ только как вспомогательный инструмент и проверяет материалы перед включением в отчёт или код.')
+replace_paragraph('Правила курса обязательны для всех команд; добавьте собственные правила команды.', 'Ниже — проект правил команды. До сдачи отчёта участники должны их обсудить и подтвердить.')
 replace_paragraph('Скопируйте текст в файл README.md в корне репозитория и заполните.', 'Ниже приведено краткое содержание; полный актуальный README.md размещён в корне репозитория GoCue.')
 replace_paragraph('6.2. Шаблон README.md', '6.2. Краткое содержание README.md')
 replace_paragraph('Оценки: В – высокая, С – средняя, Н – низкая. Подумайте о рисках команды (нагрузка, болезни, уход участника), технологий, данных, заказчика и сроков.', 'Оценки: В – высокая, С – средняя, Н – низкая. Риски команды, технологий и данных пересматриваются на планировании.')
@@ -267,17 +267,18 @@ for i, values in enumerate(team_roles, start=1):
     row(17, i, values)
 
 # 5. AI policy
-tools = [
-    ('ChatGPT / Codex', 'Черновик Vision и устава, анализ шаблона, проверка формулировок, подготовка отчёта и README', 'Инициатор запроса (участник команды уточняется)', 'Каждую формулировку проверяет команда; факты об аналогах сверяются с первоисточниками'),
-    ('Другие ИИ-инструменты', 'Пока не заявлены', '—', 'Добавлять в журнал только после фактического использования'),
-    ('—', '—', '—', '—'),
-    ('—', '—', '—', '—'),
-]
-for i, values in enumerate(tools, start=1):
-    row(18, i, values)
-put(19, 1, 0, 'Черновики идей, текста, схем, кода и тестов; дополнительно — генерация только синтетических контекстных событий.')
-put(19, 1, 1, 'Журнал применения ИИ; человеческая проверка результата; проверка источников и лицензий; пометка применения ИИ в изменениях документации и кода.')
-put(19, 1, 2, 'Передавать персональные данные, реальные маршруты и точные места пользователей, ключи и пароли; сдавать непроверенный текст; скрывать применение ИИ; выдавать планируемые действия за выполненные.')
+put(18, 0, 2, 'Кто применял')
+row(18, 1, (
+    'ChatGPT / Codex',
+    'Черновики карточки проекта, Vision, устава, README и задач; анализ задания и шаблона; правка текста и сборка отчёта.',
+    'Команда «Диалог» при подготовке ЛР 1',
+    'Результат не считается готовым без проверки по заданию, спецификации и первоисточникам.',
+))
+for extra_row in list(tables[18].rows)[2:]:
+    tables[18]._element.remove(extra_row._element)
+put(19, 1, 0, 'Получать идеи и черновики текста, кода и тестов; использовать вымышленные примеры мест и визитов.')
+put(19, 1, 1, 'Записывать применение ИИ в журнал; проверять результат вручную; сверять факты об аналогах с официальными источниками; отмечать ошибки и правки.')
+put(19, 1, 2, 'Передавать ИИ персональные данные, реальные маршруты, адреса пользователей, ключи и пароли; сдавать непроверенный текст; скрывать использование ИИ или выдавать планы за выполненную работу.')
 
 # 6. Workspace (actual state only)
 environment = [
@@ -342,24 +343,38 @@ team_elements = [element for element in document.element.body if element not in 
 policy_heading = next(paragraph for paragraph in document.paragraphs if paragraph.text == '5. Политика использования ИИ в команде')
 for element in team_elements:
     policy_heading._p.addprevious(element)
+policy_heading.style = next(p.style for p in document.paragraphs if p.text == '4. Команда и рабочие соглашения')
+for run in policy_heading.runs:
+    run.font.size = None
+    run.font.name = None
+    run.bold = None
+policy_intro = document.add_paragraph('ИИ применялся при подготовке учебных материалов, но не входит в само приложение GoCue. Ниже указано фактическое использование и предложены правила для дальнейшей работы.')
+policy_heading._p.addnext(policy_intro._p)
+other_tools_note = document.add_paragraph('Другие ИИ-инструменты в работе над ЛР 1 не заявлены.')
+tables[18]._element.addnext(other_tools_note._p)
 
 existing_elements = set(document.element.body)
 heading('5.3. Журнал использования ИИ')
 journal = document.add_table(rows=1, cols=5)
 for cell, label in zip(journal.rows[0].cells, ['Дата', 'Задача и инструмент', 'Получено', 'Решение', 'Проверка']):
     cell.text = label
-cells = journal.add_row().cells
-for cell, value in zip(cells, [
-    '30.09.2026',
-    'ЛР 1; ChatGPT / Codex',
-    'Черновики карточки, Vision, устава и README',
-    'Отредактировано; ждёт проверки команды',
-    'Структура — по заданию; аналоги — по справкам Apple и Google',
-]):
-    cell.text = value
-    for paragraph in cell.paragraphs:
-        for run in paragraph.runs:
-            run.font.size = Pt(8.5)
+for values in [
+    ('30.09.2026', 'Черновик ЛР 1; ChatGPT / Codex', 'Карточка, Vision, устав, README', 'Взято как черновик', 'Сверено с заданием и спецификацией'),
+    ('14.10.2026', 'Правка ЛР 1; ChatGPT / Codex', 'Проблема, аналоги, матрица, раздел 5, DOCX и PDF', 'Исправлено в отчёте; ждёт утверждения команды', 'Сверено с ручными правками и заданием; аналоги — со справками Apple и Google'),
+]:
+    cells = journal.add_row().cells
+    for cell, value in zip(cells, values):
+        cell.text = value
+journal.autofit = False
+journal_widths = [Cm(2.2), Cm(3.1), Cm(4.1), Cm(3.3), Cm(4.3)]
+for column, width in zip(journal.columns, journal_widths):
+    column.width = width
+for journal_row in journal.rows:
+    for cell, width in zip(journal_row.cells, journal_widths):
+        cell.width = width
+        for paragraph in cell.paragraphs:
+            for run in paragraph.runs:
+                run.font.size = Pt(8.5)
 ai_elements = [element for element in document.element.body if element not in existing_elements]
 environment_heading = next(paragraph for paragraph in document.paragraphs if paragraph.text == '6. Рабочая среда при необходимости')
 for element in ai_elements:
