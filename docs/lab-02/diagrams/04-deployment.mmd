@@ -1,0 +1,19 @@
+flowchart TB
+    subgraph PHONE["Устройство пользователя — Samsung Galaxy S25 / Android"]
+      UI["GoCue UI"]
+      BG["Фоновый обработчик визитов"]
+      STORE[("Локальная БД")]
+      GEO["Android Geofencing API"]
+      NOTIF["Android Notification API"]
+      UI <--> STORE
+      BG <--> STORE
+      GEO -->|"ENTER / EXIT"| BG
+      BG -->|"одно уведомление"| NOTIF
+      NOTIF --> UI
+    end
+    SAT["Системный провайдер местоположения"] --> GEO
+    USER["Пользователь"] <--> UI
+    USER <-->|"системное уведомление"| NOTIF
+    NO["Нет сервера / облачной БД"]
+    PHONE -.- NO
+

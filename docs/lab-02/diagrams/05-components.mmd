@@ -1,0 +1,18 @@
+flowchart TB
+    OS["Android Geofence API"] --> GM["GeofenceManager"]
+    GM --> PE["PresenceEngine"]
+    PE --> CS["ContextSnapshotBuilder"]
+    PR["PlaceResolver"] --> CS
+    CS --> IE["IntentEngine"]
+    RE["RequirementEvaluators"] --> IE
+    IE --> NC["NotificationCoordinator"]
+    NC --> NAPI["Android Notification API"]
+    UI["Android UI + Debug/Simulation"] --> REPO["Repositories"]
+    UI --> PE
+    REPO <--> DB[("Локальная БД")]
+    PE --> REPO
+    PR --> REPO
+    IE --> REPO
+    NC --> REPO
+    note["Граница: IntentEngine получает контекст, не GPS"] -.- IE
+

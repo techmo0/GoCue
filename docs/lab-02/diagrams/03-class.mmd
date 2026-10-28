@@ -1,0 +1,63 @@
+classDiagram
+    direction LR
+    class Intent {
+      +UUID id
+      +String title
+      +IntentStatus status
+      +Instant createdAt
+      +Instant completedAt
+    }
+    class Requirement {
+      +UUID id
+      +RequirementType type
+      +Operator operator
+      +String value
+    }
+    class Place {
+      +UUID id
+      +String name
+      +Double latitude
+      +Double longitude
+      +Double radiusMeters
+      +PlaceRole role
+    }
+    class SemanticPlaceBinding {
+      +String semanticName
+      +UUID placeId
+      +BindingSource source
+    }
+    class Visit {
+      +UUID id
+      +UUID placeId
+      +VisitState state
+      +Instant enteredAt
+      +Instant confirmedAt
+      +Instant exitedAt
+    }
+    class Suppression {
+      +UUID intentId
+      +UUID visitId
+      +SuppressionMode mode
+    }
+    class ContextSnapshot {
+      +UUID placeId
+      +Set roles
+      +Set semanticNames
+      +UUID visitId
+      +VisitState presence
+    }
+    class RequirementEvaluator {
+      <<interface>>
+      +matches(req, context) Boolean
+    }
+    class IntentEngine {
+      +evaluate(intents, context) List~Intent~
+    }
+    Intent "1" *-- "1..*" Requirement : требует
+    Place "1" <-- "0..*" Visit : посещается
+    Place "1" <-- "0..*" SemanticPlaceBinding : разрешает
+    Intent "1" <-- "0..*" Suppression : подавляется
+    Visit "1" <-- "0..*" Suppression : в визите
+    IntentEngine --> RequirementEvaluator : использует
+    IntentEngine --> ContextSnapshot : получает
+

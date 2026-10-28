@@ -1,0 +1,62 @@
+erDiagram
+    INTENT ||--|{ REQUIREMENT : has
+    PLACE ||--o{ SEMANTIC_BINDING : resolves
+    PLACE ||--o{ PLACE_VISIT : has
+    INTENT ||--o{ INTENT_SUPPRESSION : has
+    PLACE_VISIT ||--o{ INTENT_SUPPRESSION : scopes
+    PLACE_VISIT ||--o{ NOTIFICATION_GROUP : deduplicates
+    PLACE_VISIT o|--o{ EVENT : explains
+    INTENT {
+      uuid id PK
+      string title
+      string status
+      datetime created_at
+      datetime completed_at
+    }
+    REQUIREMENT {
+      uuid id PK
+      uuid intent_id FK
+      string type
+      string operator
+      string value
+    }
+    PLACE {
+      uuid id PK
+      string name
+      decimal latitude
+      decimal longitude
+      decimal radius_meters
+      string role
+    }
+    SEMANTIC_BINDING {
+      string semantic_name PK
+      uuid place_id FK
+      string source
+    }
+    PLACE_VISIT {
+      uuid id PK
+      uuid place_id FK
+      string state
+      datetime entered_at
+      datetime confirmed_at
+      datetime exited_at
+    }
+    INTENT_SUPPRESSION {
+      uuid intent_id PK,FK
+      uuid visit_id PK,FK
+      string mode
+      datetime created_at
+    }
+    NOTIFICATION_GROUP {
+      uuid visit_id PK,FK
+      string context_key PK
+      datetime reserved_at
+      datetime sent_at
+    }
+    EVENT {
+      uuid id PK
+      uuid visit_id FK
+      string type
+      datetime timestamp
+      string payload_json
+    }
