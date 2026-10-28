@@ -6,7 +6,7 @@
 
 1. [Техническое задание — DOCX](Техническое_задание.docx) или [PDF](Техническое_задание.pdf): формализованные требования, Must/Should, сценарии и критерии приёмки.
 2. [Технический проект — DOCX](Технический_проект.docx) или [PDF](Технический_проект.pdf): архитектура, объяснение решений, UML и ER.
-3. **Файл проекта / ссылка на ресурс:** [репозиторий GoCue](https://github.com/techmo0/GoCue/tree/main/docs/lab-02) и [редактируемые исходники всех восьми диаграмм](diagrams/README.md). Файлы `.mmd` можно изменить; SVG/PNG — только экспорт для просмотра и встраивания.
+3. **Файл проекта / ссылка на ресурс:** [репозиторий GoCue](https://github.com/techmo0/GoCue/tree/main/docs/lab-02) и [редактируемые исходники всех восьми диаграмм](diagrams/README.md). Файлы `.mmd`/`.puml` можно изменить; SVG/PNG — экспорт для просмотра и встраивания.
 
 Оригиналы текстов для совместного редактирования: [ТЗ в Markdown](Техническое_задание.md), [ТП в Markdown](Технический_проект.md). DOCX собираются скриптом [`../../build_lab2_docs.py`](../../build_lab2_docs.py). В проекте пока нет работающего Android-приложения; это **проектное решение** для ЛР2.
 
@@ -15,10 +15,10 @@
 | Обязательный вид | Исходник |
 | --- | --- |
 | Контекстная | [`01-context.mmd`](diagrams/01-context.mmd) |
-| Use Case | [`02-use-case.mmd`](diagrams/02-use-case.mmd) |
+| Use Case | [`02-use-case.puml`](diagrams/02-use-case.puml) |
 | Классов | [`03-class.mmd`](diagrams/03-class.mmd) |
-| Развёртывания | [`04-deployment.mmd`](diagrams/04-deployment.mmd) |
-| Компонентов | [`05-components.mmd`](diagrams/05-components.mmd) |
+| Развёртывания | [`04-deployment.puml`](diagrams/04-deployment.puml) |
+| Компонентов | [`05-components.puml`](diagrams/05-components.puml) |
 | Деятельности | [`06-activity.mmd`](diagrams/06-activity.mmd) |
 | Состояний (выбранный вариант) | [`07-state.mmd`](diagrams/07-state.mmd) |
 | ER | [`08-er.mmd`](diagrams/08-er.mmd) |

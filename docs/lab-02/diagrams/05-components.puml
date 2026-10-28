@@ -1,0 +1,36 @@
+@startuml
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam componentStyle uml2
+skinparam defaultFontName "DejaVu Sans"
+skinparam component {
+  BackgroundColor #EAF2F9
+  BorderColor #2D70B2
+  FontColor #20384F
+}
+
+package "GoCue" {
+  component "UI + симулятор" as UI
+  component "Core Logic" as Core {
+    component "PresenceEngine\n+ GeofenceManager" as Presence
+    component "ContextSnapshotBuilder\n+ PlaceResolver" as Context
+    component "IntentEngine\n+ RequirementEvaluators" as Engine
+    component "NotificationCoordinator" as Notify
+  }
+  component "Repositories" as Repo
+  database "Локальная БД" as DB
+}
+
+component "Android Geofencing API" as GeoAPI <<external>>
+component "Android Notification API" as NotifAPI <<external>>
+
+UI ..> Core : команды пользователя / симуляция
+Core ..> Repo : устойчивое состояние
+Repo --> DB : чтение / запись
+GeoAPI --> Presence : события ENTER / EXIT
+Presence --> Context : подтверждённый визит
+Context --> Engine : ContextSnapshot
+Engine --> Notify : EligibleIntents
+Notify --> NotifAPI : одна группа / визит
+
+@enduml

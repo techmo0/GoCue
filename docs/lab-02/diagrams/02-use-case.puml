@@ -1,0 +1,42 @@
+@startuml
+left to right direction
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam defaultFontName "DejaVu Sans"
+skinparam usecase {
+  BackgroundColor #EAF2F9
+  BorderColor #2D70B2
+  ArrowColor #35536E
+}
+skinparam actor {
+  BorderColor #35536E
+  FontColor #20384F
+}
+
+actor "Пользователь" as User
+actor "Android OS" as Android
+
+rectangle "GoCue" {
+  usecase "UC-01\nЗаписать или\nизменить дело" as UC1
+  usecase "UC-02\nВыбрать свой\nмагазин" as UC2
+  usecase "UC-03\nПолучить список\nпри визите" as UC3
+  usecase "UC-04\nЗавершить дело" as UC4
+  usecase "UC-05\nНапомнить в\nследующий визит" as UC5
+  usecase "UC-06\nПонять причину\nсрабатывания" as UC6
+  usecase "UC-07\nСимулировать визит" as UC7
+  usecase "Подтвердить визит" as Confirm
+}
+
+User -- UC1
+User -- UC2
+User -- UC3
+User -- UC4
+User -- UC5
+User -- UC6
+User -- UC7
+Confirm -- Android : события геозоны
+UC3 -- Android : доставка уведомления
+
+UC3 .> Confirm : <<include>>
+UC7 .> Confirm : <<include>>
+@enduml

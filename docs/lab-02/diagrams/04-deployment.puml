@@ -1,0 +1,33 @@
+@startuml
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam defaultFontName "DejaVu Sans"
+skinparam node {
+  BackgroundColor #F0F6FB
+  BorderColor #2D70B2
+  FontColor #20384F
+}
+skinparam artifact {
+  BackgroundColor #FFFFFF
+  BorderColor #5480A8
+}
+
+node "Samsung Galaxy S25\n(устройство испытания)" <<device>> as Phone {
+  node "Android OS" <<executionEnvironment>> as Android {
+    node "Процесс GoCue" <<executionEnvironment>> as AppProcess {
+      artifact "GoCue APK" as APK
+      artifact "Локальная БД\nи журнал событий" as DB
+    }
+    node "Службы геолокации" <<executionEnvironment>> as Location {
+      artifact "Geofencing API" as Geofence
+    }
+    node "Служба уведомлений" <<executionEnvironment>> as Notifications {
+      artifact "Notification API" as NotificationAPI
+    }
+  }
+}
+
+Location --> AppProcess : ENTER / EXIT
+AppProcess --> Notifications : запрос одного уведомления
+APK --> DB : локальная запись / чтение
+@enduml
