@@ -1,0 +1,76 @@
+@startuml
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam defaultFontName "DejaVu Sans"
+skinparam class {
+  BackgroundColor #F0F6FB
+  BorderColor #2D70B2
+  ArrowColor #35536E
+}
+hide circle
+
+class Intent {
+  +id: UUID
+  +title: String
+  +status: IntentStatus
+  +createdAt: Instant
+  +completedAt: Instant?
+}
+class Requirement {
+  +id: UUID
+  +type: RequirementType
+  +operator: Operator
+  +value: String
+}
+class Place {
+  +id: UUID
+  +name: String
+  +latitude: Double
+  +longitude: Double
+  +radiusMeters: Double
+  +role: PlaceRole
+}
+class SemanticPlaceBinding {
+  +semanticName: String
+  +placeId: UUID
+  +source: BindingSource
+}
+class Visit {
+  +id: UUID
+  +placeId: UUID
+  +state: VisitState
+  +enteredAt: Instant
+  +confirmedAt: Instant?
+  +exitedAt: Instant?
+}
+class Suppression {
+  +intentId: UUID
+  +visitId: UUID
+  +mode: SuppressionMode
+}
+class ContextSnapshot <<value object>> {
+  +placeId: UUID
+  +roles: Set<PlaceRole>
+  +semanticNames: Set<String>
+  +visitId: UUID
+  +presence: VisitState
+}
+interface RequirementEvaluator {
+  +matches(req, context): Boolean
+}
+class IntentEngine {
+  +evaluate(intents, context): List<Intent>
+}
+
+Intent "1" *-- "1..*" Requirement : требования
+Place "1" <-- "0..*" Visit : визиты
+Place "1" <-- "0..*" SemanticPlaceBinding : привязки
+Intent "1" <-- "0..*" Suppression : подавления
+Visit "1" <-- "0..*" Suppression : в визите
+IntentEngine ..> RequirementEvaluator : использует
+IntentEngine ..> ContextSnapshot : получает
+IntentEngine ..> Intent : оценивает
+RequirementEvaluator ..> Requirement : проверяет
+ContextSnapshot ..> Visit : описывает
+ContextSnapshot ..> Place : описывает
+@enduml

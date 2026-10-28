@@ -1,0 +1,25 @@
+@startuml
+left to right direction
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam defaultFontName "DejaVu Sans"
+skinparam componentStyle uml2
+skinparam component {
+  BackgroundColor #EAF2F9
+  BorderColor #2D70B2
+}
+
+actor "Пользователь" as User
+component "GoCue\nлокальное Android-приложение" as App
+component "Android OS\nгеозоны, разрешения, уведомления" as OS <<external>>
+
+User --> App : намерения, места, команды
+App --> User : список дел, объяснение показа
+OS --> App : ENTER / EXIT, разрешения
+App --> OS : регистрация геозоны, запрос уведомления
+
+note bottom of App
+  Данные хранятся на устройстве.
+  Сервера и облачной БД нет.
+end note
+@enduml

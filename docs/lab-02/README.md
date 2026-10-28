@@ -6,7 +6,7 @@
 
 1. [Техническое задание — DOCX](Техническое_задание.docx) или [PDF](Техническое_задание.pdf): формализованные требования, Must/Should, сценарии и критерии приёмки.
 2. [Технический проект — DOCX](Технический_проект.docx) или [PDF](Технический_проект.pdf): архитектура, объяснение решений, UML и ER.
-3. **Файл проекта / ссылка на ресурс:** [репозиторий GoCue](https://github.com/techmo0/GoCue/tree/main/docs/lab-02) и [редактируемые исходники всех восьми диаграмм](diagrams/README.md). Файлы `.mmd`/`.puml` можно изменить; SVG/PNG — экспорт для просмотра и встраивания.
+3. **Файл проекта / ссылка на ресурс:** [репозиторий GoCue](https://github.com/techmo0/GoCue/tree/main/docs/lab-02) и [редактируемые исходники всех восьми диаграмм](diagrams/README.md). Все исходники — `.puml`; SVG/PNG — экспорт для просмотра и встраивания.
 
 Оригиналы текстов для совместного редактирования: [ТЗ в Markdown](Техническое_задание.md), [ТП в Markdown](Технический_проект.md). DOCX собираются скриптом [`../../build_lab2_docs.py`](../../build_lab2_docs.py). В проекте пока нет работающего Android-приложения; это **проектное решение** для ЛР2.
 
@@ -14,13 +14,13 @@
 
 | Обязательный вид | Исходник |
 | --- | --- |
-| Контекстная | [`01-context.mmd`](diagrams/01-context.mmd) |
+| Контекстная | [`01-context.puml`](diagrams/01-context.puml) |
 | Use Case | [`02-use-case.puml`](diagrams/02-use-case.puml) |
-| Классов | [`03-class.mmd`](diagrams/03-class.mmd) |
+| Классов | [`03-class.puml`](diagrams/03-class.puml) |
 | Развёртывания | [`04-deployment.puml`](diagrams/04-deployment.puml) |
 | Компонентов | [`05-components.puml`](diagrams/05-components.puml) |
-| Деятельности | [`06-activity.mmd`](diagrams/06-activity.mmd) |
-| Состояний (выбранный вариант) | [`07-state.mmd`](diagrams/07-state.mmd) |
-| ER | [`08-er.mmd`](diagrams/08-er.mmd) |
+| Деятельности | [`06-activity.puml`](diagrams/06-activity.puml) |
+| Состояний (выбранный вариант) | [`07-state.puml`](diagrams/07-state.puml) |
+| ER | [`08-er.puml`](diagrams/08-er.puml) |
 
 Для защиты честно указывать: параметры 60 секунд, защита от колебаний на границе и реальная доставка геозон — проектные гипотезы, требующие проверки на устройстве. Метрики в ТЗ — целевые, не достигнутые результаты.

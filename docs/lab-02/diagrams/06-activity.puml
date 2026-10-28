@@ -1,0 +1,38 @@
+@startuml
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam defaultFontName "DejaVu Sans"
+skinparam activity {
+  BackgroundColor #EAF2F9
+  BorderColor #2D70B2
+  DiamondBackgroundColor #F7FBFF
+  DiamondBorderColor #2D70B2
+}
+
+start
+:ENTER;
+:Создать визит CANDIDATE;
+if (Внутри геозоны >= 60 с?) then (да)
+  :CONFIRMED;
+  :Собрать ContextSnapshot;
+  :Проверить ACTIVE, требования\nи подавления визита;
+  if (Есть подходящие дела?) then (да)
+    :Сгруппировать по визиту\nи контексту;
+    if (Ключ группы уже сохранён?) then (да)
+      :Не повторять показ;
+      stop
+    else (нет)
+      :Атомарно сохранить ключ;
+      :Запросить одно уведомление;
+      :Записать событие и причину;
+      stop
+    endif
+  else (нет)
+    :Нет уведомления;
+    stop
+  endif
+else (нет)
+  :Ждать / завершить без сигнала;
+  stop
+endif
+@enduml

@@ -1,0 +1,83 @@
+@startuml
+left to right direction
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam defaultFontName "DejaVu Sans"
+skinparam linetype ortho
+skinparam class {
+  BackgroundColor #F0F6FB
+  BorderColor #2D70B2
+}
+hide circle
+
+entity "INTENT" as INTENT {
+  * id : UUID <<PK>>
+  --
+  * title : TEXT
+  * status : TEXT
+  * created_at : TIMESTAMP
+  completed_at : TIMESTAMP?
+}
+entity "REQUIREMENT" as REQUIREMENT {
+  * id : UUID <<PK>>
+  --
+  * intent_id : UUID <<FK>>
+  * type : TEXT
+  * operator : TEXT
+  * value : TEXT
+}
+entity "PLACE" as PLACE {
+  * id : UUID <<PK>>
+  --
+  * name : TEXT
+  * latitude : DECIMAL
+  * longitude : DECIMAL
+  * radius_meters : DECIMAL
+  * role : TEXT
+}
+entity "SEMANTIC_BINDING" as BINDING {
+  * semantic_name : TEXT <<PK>>
+  --
+  * place_id : UUID <<FK>>
+  * source : TEXT
+}
+entity "PLACE_VISIT" as VISIT {
+  * id : UUID <<PK>>
+  --
+  * place_id : UUID <<FK>>
+  * state : TEXT
+  * entered_at : TIMESTAMP
+  confirmed_at : TIMESTAMP?
+  exited_at : TIMESTAMP?
+}
+entity "INTENT_SUPPRESSION" as SUPPRESSION {
+  * intent_id : UUID <<PK, FK>>
+  * visit_id : UUID <<PK, FK>>
+  --
+  * mode : TEXT
+  * created_at : TIMESTAMP
+}
+entity "NOTIFICATION_GROUP" as NOTIFICATION {
+  * visit_id : UUID <<PK, FK>>
+  * context_key : TEXT <<PK>>
+  --
+  * reserved_at : TIMESTAMP
+  sent_at : TIMESTAMP?
+}
+entity "EVENT" as EVENT {
+  * id : UUID <<PK>>
+  --
+  visit_id : UUID? <<FK>>
+  * type : TEXT
+  * timestamp : TIMESTAMP
+  * payload_json : TEXT
+}
+
+INTENT ||--|{ REQUIREMENT : has
+PLACE ||--o{ BINDING : resolves
+PLACE ||--o{ VISIT : has
+INTENT ||--o{ SUPPRESSION : has
+VISIT ||--o{ SUPPRESSION : scopes
+VISIT ||--o{ NOTIFICATION : deduplicates
+VISIT |o--o{ EVENT : explains
+@enduml
