@@ -14,7 +14,7 @@
 
 | Обязательный вид | Исходник |
 | --- | --- |
-| Контекстная | [`01-context.puml`](diagrams/01-context.puml) |
+| Контекстная IDEF0 (A-0) | [`01-context.puml`](diagrams/01-context.puml) |
 | Use Case | [`02-use-case.puml`](diagrams/02-use-case.puml) |
 | Классов | [`03-class.puml`](diagrams/03-class.puml) |
 | Развёртывания | [`04-deployment.puml`](diagrams/04-deployment.puml) |

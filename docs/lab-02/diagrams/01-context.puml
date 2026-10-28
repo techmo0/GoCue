@@ -1,25 +1,23 @@
 @startuml
-left to right direction
+title Контекстная диаграмма IDEF0 · A-0
 skinparam backgroundColor white
 skinparam shadowing false
-skinparam defaultFontName "DejaVu Sans"
-skinparam componentStyle uml2
-skinparam component {
-  BackgroundColor #EAF2F9
-  BorderColor #2D70B2
-}
+skinparam defaultFontName DejaVu Sans
+skinparam rectangleBorderColor white
+skinparam rectangleFontColor #1E3349
+skinparam ArrowColor #34536F
+skinparam linetype ortho
+skinparam rectangle<<function>>BorderColor #2D70B2
+hide stereotype
 
-actor "Пользователь" as User
-component "GoCue\nлокальное Android-приложение" as App
-component "Android OS\nгеозоны, разрешения, уведомления" as OS <<external>>
+rectangle "УПРАВЛЕНИЕ\nРазрешения Android\nПравила контекста\nПорог выдержки и дедупликация" as C #white
+rectangle "ВХОД\nНамерения и настройки мест\nСобытия геозон ENTER / EXIT" as I #white
+rectangle "Возвращать намерения\nв подходящем месте\n\n0" as A0 <<function>> #EDF5FC
+rectangle "ВЫХОД\nСписок дел\nГрупповое уведомление\nЗапись в журнале событий" as O #white
+rectangle "МЕХАНИЗМ\nПриложение GoCue на Android\nСлужбы геозон и уведомлений\nЛокальная БД" as M #white
 
-User --> App : намерения, места, команды
-App --> User : список дел, объяснение показа
-OS --> App : ENTER / EXIT, разрешения
-App --> OS : регистрация геозоны, запрос уведомления
-
-note bottom of App
-  Данные хранятся на устройстве.
-  Сервера и облачной БД нет.
-end note
+C -down-> A0
+I -right-> A0
+A0 -right-> O
+M -up-> A0
 @enduml
