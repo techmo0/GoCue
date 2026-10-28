@@ -1,4 +1,5 @@
 @startuml
+title Жизненный цикл одного посещения места
 skinparam backgroundColor white
 skinparam shadowing false
 skinparam defaultFontName "DejaVu Sans"
@@ -8,17 +9,13 @@ skinparam state {
   ArrowColor #35536E
 }
 
-[*] --> OUTSIDE
-OUTSIDE --> CANDIDATE : ENTER / создать visitId
-CANDIDATE --> CONFIRMED : inside && dwell >= 60 с
-CANDIDATE --> OUTSIDE : EXIT до подтверждения / ENDED
-CONFIRMED --> EXIT_PENDING : EXIT / начать grace 60 с
-EXIT_PENDING --> CONFIRMED : ENTER до grace / тот же visitId
-EXIT_PENDING --> OUTSIDE : grace истёк / ENDED
-CONFIRMED --> CONFIRMED : повторная оценка / без дубля
+state "Визит начат\nждём 60 секунд" as Candidate
+state "Визит подтверждён\nможно показать дела" as Confirmed
+state "Визит завершён" as Ended
 
-note right of EXIT_PENDING
-  Техническое состояние Presence Engine;
-  в БД визит ещё CONFIRMED.
-end note
+[*] --> Candidate : Телефон зафиксировал вход
+Candidate --> Confirmed : Остался в месте 60 секунд
+Candidate --> Ended : Вышел раньше 60 секунд
+Confirmed --> Ended : Вышел и не вернулся 60 секунд
+Ended --> [*]
 @enduml
