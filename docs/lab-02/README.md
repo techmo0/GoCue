@@ -6,7 +6,7 @@
 
 1. [Техническое задание — DOCX](Техническое_задание.docx) или [PDF](Техническое_задание.pdf): формализованные требования, Must/Should, сценарии и критерии приёмки.
 2. [Технический проект — DOCX](Технический_проект.docx) или [PDF](Технический_проект.pdf): архитектура, объяснение решений, UML и ER.
-3. **Файл проекта / ссылка на ресурс:** [репозиторий GoCue](https://github.com/techmo0/GoCue/tree/main/docs/lab-02) и [редактируемые исходники всех восьми диаграмм](diagrams/README.md). Все исходники — `.puml`; SVG/PNG — экспорт для просмотра и встраивания.
+3. **Файл проекта / ссылка на ресурс:** [репозиторий GoCue](https://github.com/techmo0/GoCue/tree/main/docs/lab-02) и [файлы восьми диаграмм](diagrams/README.md). Контекстная диаграмма экспортирована из Ramus в PNG. Для остальных схем доступны PlantUML, SVG и PNG.
 
 Оригиналы текстов для совместного редактирования: [ТЗ в Markdown](Техническое_задание.md), [ТП в Markdown](Технический_проект.md). DOCX собираются скриптом [`../../build_lab2_docs.py`](../../build_lab2_docs.py). В проекте пока нет работающего Android-приложения; это **проектное решение** для ЛР2.
 
@@ -14,7 +14,7 @@
 
 | Обязательный вид | Исходник |
 | --- | --- |
-| Контекстная IDEF0 (A-0) | [`01-context.puml`](diagrams/01-context.puml) |
+| Контекстная IDEF0 (A-0) | [`01_A-0.png`](diagrams/rendered/01_A-0.png) |
 | Use Case | [`02-use-case.puml`](diagrams/02-use-case.puml) |
 | Классов | [`03-class.puml`](diagrams/03-class.puml) |
 | Развёртывания | [`04-deployment.puml`](diagrams/04-deployment.puml) |
