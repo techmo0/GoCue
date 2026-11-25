@@ -1,76 +1,142 @@
 @startuml
-skinparam backgroundColor white
-skinparam shadowing false
-skinparam defaultFontName "DejaVu Sans"
+
+skinparam classAttributeIconSize 0
 skinparam class {
-  BackgroundColor #F0F6FB
-  BorderColor #2D70B2
-  ArrowColor #35536E
+    BackgroundColor #F0F6FC
+    BorderColor #6B9BD2
+    ArrowColor #315A82
 }
-hide circle
+
+' =========================
+' КЛАССЫ
+' =========================
 
 class Intent {
-  +id: UUID
-  +title: String
-  +status: IntentStatus
-  +createdAt: Instant
-  +completedAt: Instant?
-}
-class Requirement {
-  +id: UUID
-  +type: RequirementType
-  +operator: Operator
-  +value: String
-}
-class Place {
-  +id: UUID
-  +name: String
-  +latitude: Double
-  +longitude: Double
-  +radiusMeters: Double
-  +role: PlaceRole
-}
-class SemanticPlaceBinding {
-  +semanticName: String
-  +placeId: UUID
-  +source: BindingSource
-}
-class Visit {
-  +id: UUID
-  +placeId: UUID
-  +state: VisitState
-  +enteredAt: Instant
-  +confirmedAt: Instant?
-  +exitedAt: Instant?
-}
-class Suppression {
-  +intentId: UUID
-  +visitId: UUID
-  +mode: SuppressionMode
-}
-class ContextSnapshot <<value object>> {
-  +placeId: UUID
-  +roles: Set<PlaceRole>
-  +semanticNames: Set<String>
-  +visitId: UUID
-  +presence: VisitState
-}
-interface RequirementEvaluator {
-  +matches(req, context): Boolean
-}
-class IntentEngine {
-  +evaluate(intents, context): List<Intent>
+    id: UUID
+    title: String
+    status: IntentStatus
+    createdAt: Instant
+    completedAt: Instant?
+
+    --
+    + updateStatus(status: IntentStatus): void
+    + complete(): void
+    + addRequirement(requirement: Requirement): void
 }
 
-Intent "1" *-- "1..*" Requirement : требования
-Place "1" <-- "0..*" Visit : визиты
-Place "1" <-- "0..*" SemanticPlaceBinding : привязки
-Intent "1" <-- "0..*" Suppression : подавления
-Visit "1" <-- "0..*" Suppression : в визите
+class IntentEngine {
+    + evaluate(intents: List<Intent>, context: ContextSnapshot): List<Intent>
+    + filterIntents(intents: List<Intent>): List<Intent>
+}
+
+class RequirementEvaluator {
+    + matches(req: Requirement, context: ContextSnapshot): Boolean
+    + evaluateAll(requirements: List<Requirement>, context: ContextSnapshot): Boolean
+}
+
+class Requirement {
+    id: UUID
+    type: RequirementType
+    operator: Operator
+    value: String
+
+    --
+    + validate(): Boolean
+    + compare(actualValue: String): Boolean
+}
+
+class ContextSnapshot <<value object>> {
+    placeId: UUID
+    roles: Set<PlaceRole>
+    semanticNames: Set<String>
+    visitId: UUID
+    presence: VisitState
+
+    --
+    + updatePresence(state: VisitState): void
+    + addSemanticName(name: String): void
+    + hasRole(role: PlaceRole): Boolean
+}
+
+class Place {
+    id: UUID
+    name: String
+    latitude: Double
+    longitude: Double
+    radiusMeters: Double
+    role: PlaceRole
+
+    --
+    + calculateDistance(latitude: Double, longitude: Double): Double
+    + contains(latitude: Double, longitude: Double): Boolean
+    + updateCoordinates(latitude: Double, longitude: Double): void
+}
+
+class Visit {
+    id: UUID
+    placeId: UUID
+    state: VisitState
+    enteredAt: Instant
+    confirmedAt: Instant?
+    exitedAt: Instant?
+
+    --
+    + confirm(): void
+    + exit(): void
+    + updateState(state: VisitState): void
+}
+
+class SemanticPlaceBinding {
+    semanticName: String
+    placeId: UUID
+    source: BindingSource
+
+    --
+    + bind(placeId: UUID): void
+    + unbind(): void
+    + isBoundTo(placeId: UUID): Boolean
+}
+
+class Suppression {
+    intentId: UUID
+    visitId: UUID
+    mode: SuppressionMode
+
+    --
+    + apply(): void
+    + remove(): void
+    + isActive(): Boolean
+}
+
+' =========================
+' СВЯЗИ МЕЖДУ КЛАССАМИ
+' =========================
+
+' Зависимости IntentEngine
+IntentEngine ..> Intent : оценивает
 IntentEngine ..> RequirementEvaluator : использует
 IntentEngine ..> ContextSnapshot : получает
-IntentEngine ..> Intent : оценивает
+
+' Проверка требований
 RequirementEvaluator ..> Requirement : проверяет
-ContextSnapshot ..> Visit : описывает
+
+' Требования намерения
+Intent "1" *-- "1..*" Requirement : требования
+
+' Описание контекста
 ContextSnapshot ..> Place : описывает
+ContextSnapshot ..> Visit : описывает
+
+' Посещения мест
+Place "1" <-- "0..*" Visit : визиты
+
+' Семантические привязки
+Place "1" <-- "0..*" SemanticPlaceBinding : привязки
+
+' Подавления намерений
+Intent "1" <-- "0..*" Suppression : подавления
+
+' Подавления в рамках посещений
+Visit "1" <-- "0..*" Suppression : в визите
+
 @enduml
