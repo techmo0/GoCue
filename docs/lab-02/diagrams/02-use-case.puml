@@ -1,42 +1,49 @@
 @startuml
 left to right direction
-skinparam backgroundColor white
-skinparam shadowing false
-skinparam defaultFontName "DejaVu Sans"
-skinparam usecase {
-  BackgroundColor #EAF2F9
-  BorderColor #2D70B2
-  ArrowColor #35536E
-}
-skinparam actor {
-  BorderColor #35536E
-  FontColor #20384F
-}
 
 actor "Пользователь" as User
 actor "Android OS" as Android
 
 rectangle "GoCue" {
-  usecase "UC-01\nЗаписать или\nизменить дело" as UC1
-  usecase "UC-02\nВыбрать свой\nмагазин" as UC2
-  usecase "UC-03\nПолучить список\nпри визите" as UC3
-  usecase "UC-04\nЗавершить дело" as UC4
-  usecase "UC-05\nНапомнить в\nследующий визит" as UC5
-  usecase "UC-06\nПонять причину\nсрабатывания" as UC6
-  usecase "UC-07\nСимулировать визит" as UC7
-  usecase "Подтвердить визит" as Confirm
+
+  usecase "UC-01\nСоздать или изменить\nнамерение" as UC01
+
+  usecase "UC-02\nНастроить место" as UC02
+
+  usecase "UC-03\nПолучить список дел\nпри посещении места" as UC03
+
+  usecase "UC-04\nЗавершить дело" as UC04
+
+  usecase "UC-05\nПеренести дело\nна следующий визит" as UC05
+
+  usecase "UC-06\nПросмотреть причину\nсрабатывания" as UC06
+
+  usecase "Обработать событие\nгеозоны" as UC08
+
+  usecase "Определить\nподходящее место" as UC09
+
+  usecase "Сформировать\nсписок дел" as UC10
+
+  usecase "Записать событие\nв журнал" as UC11
+
+  usecase "Отправить групповое\nуведомление" as UC12
 }
 
-User -- UC1
-User -- UC2
-User -- UC3
-User -- UC4
-User -- UC5
-User -- UC6
-User -- UC7
-Confirm -- Android : события геозоны
-UC3 -- Android : доставка уведомления
+User -- UC01
+User -- UC02
+User -- UC03
+User -- UC04
+User -- UC05
+User -- UC06
 
-UC3 .> Confirm : <<include>>
-UC7 .> Confirm : <<include>>
+Android -- UC08
+Android -- UC12
+
+UC08 ..> UC09 : <<include>>
+UC08 ..> UC10 : <<include>>
+UC08 ..> UC11 : <<include>>
+UC08 ..> UC12 : <<include>>
+
+UC03 ..> UC10 : <<include>>
+
 @enduml
