@@ -1,21 +1,43 @@
 @startuml
+
 title Жизненный цикл одного посещения места
-skinparam backgroundColor white
+
+top to bottom direction
+
 skinparam shadowing false
-skinparam defaultFontName "DejaVu Sans"
+
 skinparam state {
-  BackgroundColor #EAF2F9
-  BorderColor #2D70B2
-  ArrowColor #35536E
+    BackgroundColor #F0F6FC
+    BorderColor #6B9BD2
+    FontColor #222222
+    ArrowColor #315A82
 }
 
-state "Визит начат\nждём 60 секунд" as Candidate
-state "Визит подтверждён\nможно показать дела" as Confirmed
+hide empty description
+
+[*] --> Candidate : Вход в геозону\n/ создать визит
+
+state "Ожидание подтверждения" as Candidate
+state "Посещение подтверждено" as Confirmed
+state "Ожидание возврата" as ReturnWait
 state "Визит завершён" as Ended
 
-[*] --> Candidate : Телефон зафиксировал вход
-Candidate --> Confirmed : Остался в месте 60 секунд
-Candidate --> Ended : Вышел раньше 60 секунд
-Confirmed --> Ended : Вышел и не вернулся 60 секунд
+Candidate : do / ожидать 60 секунд
+
+Candidate --> Confirmed : 60 секунд истекли\n[пользователь остался в геозоне]\n/ подтвердить визит
+
+Candidate --> Ended : Выход из геозоны\n[до истечения 60 секунд]\n/ отменить визит
+
+Confirmed : do / разрешить показ дел
+
+Confirmed --> ReturnWait : Выход из геозоны\n/ запустить таймер возврата
+
+ReturnWait : do / ожидать 60 секунд
+
+ReturnWait --> Confirmed : Повторный вход в геозону\n[до истечения 60 секунд]\n/ продолжить визит
+
+ReturnWait --> Ended : 60 секунд истекли\n[пользователь не вернулся]\n/ завершить визит
+
 Ended --> [*]
+
 @enduml
